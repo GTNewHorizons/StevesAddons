@@ -118,6 +118,17 @@ public class StevesAddonsTransformer implements IClassTransformer, Opcodes
         ITEM_SEARCH("updateSearch", "(Ljava/lang/String;Z)Ljava/util/List;")
                 {
                     @Override
+                    protected void methodTransform(ClassNode node) {
+                        MethodNode mn = getMethod(node);
+                        if (mn != null) {
+                            mn.tryCatchBlocks.clear();
+                            mn.localVariables.clear();
+                            mn.instructions = modifyInstructions(mn.instructions);
+                            complete();
+                        }
+                    }
+
+                    @Override
                     protected InsnList modifyInstructions(InsnList list)
                     {
                         list.clear();
