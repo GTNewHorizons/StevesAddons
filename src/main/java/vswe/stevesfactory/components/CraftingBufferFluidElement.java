@@ -225,7 +225,7 @@ public class CraftingBufferFluidElement implements IItemBufferElement, IItemBuff
 
     private boolean useAdvancedDetection()
     {
-        return this.craftingMenu.getResultItem().getFuzzyMode() != FuzzyMode.PRECISE;
+        return false; //this.craftingMenu.getResultItem().getFuzzyMode() != FuzzyMode.PRECISE;
     }
 
     private boolean findItems(boolean remove)
@@ -354,7 +354,7 @@ public class CraftingBufferFluidElement implements IItemBufferElement, IItemBuff
 
         if (foundItems.size() == 9)
         {
-            this.result = this.craftingMenu.getDummy().getResult(foundItems);
+            this.result = this.craftingMenu.getDummy().getResult(foundItems, recipe);
             this.result = this.result != null ? this.result.copy() : null;
             return true;
         } else
