@@ -215,17 +215,7 @@ public class CraftingBufferFluidElement implements IItemBufferElement, IItemBuff
     @Override
     public ItemStack getItemStack()
     {
-        if (this.useAdvancedDetection())
-        {
-            this.findItems(false);
-        }
-
         return this.result;
-    }
-
-    private boolean useAdvancedDetection()
-    {
-        return false; //this.craftingMenu.getResultItem().getFuzzyMode() != FuzzyMode.PRECISE;
     }
 
     private boolean findItems(boolean remove)
@@ -259,7 +249,7 @@ public class CraftingBufferFluidElement implements IItemBufferElement, IItemBuff
                         } else if (subCount > 0 && setting.isEqualForCommandExecutor(itemstack))
                         {
                             foundItems.put(i, itemstack.copy());
-                            if (this.craftingMenu.getDummy().isItemValidForRecipe(this.recipe, this.craftingMenu.getResultItem(), foundItems, this.useAdvancedDetection()))
+                            if (this.craftingMenu.getDummy().isItemValidForRecipe(this.recipe, this.craftingMenu.getResultItem(), foundItems))
                             {
                                 usedStacks.add(itemstack);
                                 --subCount;
