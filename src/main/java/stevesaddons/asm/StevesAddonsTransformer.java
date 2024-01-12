@@ -131,25 +131,6 @@ public class StevesAddonsTransformer implements IClassTransformer, Opcodes {
                 return list;
             }
         },
-        STRING_NULL_CHECK("updateSearch", "(Ljava/lang/String;Z)Ljava/util/List;") {
-
-            @Override
-            protected InsnList modifyInstructions(InsnList list) {
-                AbstractInsnNode node = list.getLast();
-                LabelNode labelNode = null;
-                while (node != list.getFirst()) {
-                    if (node instanceof JumpInsnNode) labelNode = ((JumpInsnNode) node).label;
-                    else if (node instanceof VarInsnNode && node.getOpcode() == ALOAD
-                            && ((VarInsnNode) node).var == 10) {
-                                list.insertBefore(node, new VarInsnNode(ALOAD, 10));
-                                list.insertBefore(node, new JumpInsnNode(IFNULL, labelNode));
-                                break;
-                            }
-                    node = node.getPrevious();
-                }
-                return list;
-            }
-        },
         GET_DESCRIPTION("getDescription", "(Lvswe/stevesfactory/interfaces/GuiManager;)Ljava/lang/String;") {
 
             @Override
@@ -255,26 +236,6 @@ public class StevesAddonsTransformer implements IClassTransformer, Opcodes {
         PUBLIC_TE("te", "Lvswe/stevesfactory/blocks/TileEntityClusterElement;", TransformType.FIELD,
                 TransformType.MAKE_PUBLIC),
         PUBLIC_PAIR("Pair"),
-        REMOVE_FLOW_COMPONENT("removeFlowComponent", "(ILjava/util/List;)V", TransformType.METHOD,
-                TransformType.HOOK_REPLACE) {
-
-            @Override
-            protected InsnList modifyInstructions(InsnList list) {
-                list.clear();
-                list.add(new VarInsnNode(ALOAD, 0));
-                list.add(new VarInsnNode(ILOAD, 1));
-                list.add(new VarInsnNode(ALOAD, 2));
-                list.add(
-                        new MethodInsnNode(
-                                INVOKESTATIC,
-                                "stevesaddons/asm/StevesHooks",
-                                "removeFlowComponent",
-                                "(Lvswe/stevesfactory/blocks/TileEntityManager;ILjava/util/List;)V",
-                                false));
-                list.add(new InsnNode(RETURN));
-                return list;
-            }
-        },
         LOAD_DEFAULT("loadDefault", "()V") {
 
             private Set<String> change = new HashSet<String>(
@@ -441,23 +402,6 @@ public class StevesAddonsTransformer implements IClassTransformer, Opcodes {
                         break;
                     }
                     node = node.getNext();
-                }
-                return list;
-            }
-        },
-        REMOVE_COMPONENT("removeFlowComponent", "(I)V") {
-
-            @Override
-            protected InsnList modifyInstructions(InsnList list) {
-                AbstractInsnNode node = list.getLast();
-                JumpInsnNode jump = null;
-                while (node != null) {
-                    if (node.getOpcode() == GOTO) jump = (JumpInsnNode) node;
-                    else if (node.getOpcode() == IFNE) {
-                        ((JumpInsnNode) node).label = jump.label;
-                        break;
-                    }
-                    node = node.getPrevious();
                 }
                 return list;
             }
