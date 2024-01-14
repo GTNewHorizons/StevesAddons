@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import stevesaddons.asm.StevesHooks;
+import stevesaddons.compat.StevesHooks;
 import stevesaddons.helpers.StevesEnum;
 import vswe.stevesfactory.components.ConnectionOption;
 import vswe.stevesfactory.components.FlowComponent;

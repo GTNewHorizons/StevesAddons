@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import stevesaddons.asm.StevesHooks;
+import stevesaddons.compat.StevesHooks;
 import vswe.stevesfactory.components.ComponentMenu;
 import vswe.stevesfactory.components.ConnectionOption;
 import vswe.stevesfactory.components.FlowComponent;

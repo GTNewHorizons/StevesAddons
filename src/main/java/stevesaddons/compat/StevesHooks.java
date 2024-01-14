@@ -1,4 +1,4 @@
-package stevesaddons.asm;
+package stevesaddons.compat;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -286,9 +286,8 @@ public class StevesHooks {
         }
     }
 
-    public static TileEntityManager tickTriggers(TileEntityManager manager) {
+    public static void tickTriggers(TileEntityManager manager) {
         tick(delayedRegistry.get(manager));
-        return manager;
     }
 
     private static void tick(Collection<FlowComponent> triggers) {
