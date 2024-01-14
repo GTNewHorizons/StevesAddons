@@ -33,30 +33,35 @@ import stevesaddons.network.MessageHandler;
 import stevesaddons.proxy.CommonProxy;
 import stevesaddons.recipes.ClusterUncraftingRecipe;
 import stevesaddons.reference.Metadata;
-import stevesaddons.reference.Reference;
 import stevesaddons.registry.BlockRegistry;
 import stevesaddons.registry.CommandRegistry;
 import stevesaddons.registry.ItemRegistry;
 import vswe.stevesfactory.blocks.TileEntityManager;
 
 @Mod(
-        modid = Reference.ID,
-        name = Reference.NAME,
-        version = Reference.VERSION_FULL,
+        modid = StevesAddons.ID,
+        name = StevesAddons.NAME,
+        version = Tags.VERSION,
         dependencies = "required-after:StevesFactoryManager;required-after:CoFHCore")
 public class StevesAddons {
 
-    @Mod.Instance(value = Reference.ID)
+    // User friendly version of our mods name.
+    public static final String NAME = "Steve's Addons";
+
+    // Internal mod name used for reference purposes and resource gathering.
+    public static final String ID = "StevesAddons";
+
+    @Mod.Instance(value = ID)
     public static StevesAddons INSTANCE;
 
-    @Mod.Metadata(Reference.ID)
+    @Mod.Metadata(ID)
     public static ModMetadata metadata;
 
     @SidedProxy(clientSide = "stevesaddons.proxy.ClientProxy", serverSide = "stevesaddons.proxy.CommonProxy")
     public static CommonProxy PROXY;
 
     public static GuiHandler guiHandler = new GuiHandler();
-    public static Logger log = LogManager.getLogger(Reference.ID);
+    public static Logger log = LogManager.getLogger(ID);
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import stevesaddons.StevesAddons;
 import stevesaddons.reference.Names;
-import stevesaddons.reference.Reference;
 import stevesaddons.tileentities.TileEntityRFNode;
 import vswe.stevesfactory.blocks.ModBlocks;
 
@@ -36,7 +36,7 @@ public class BlockCableRF extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister registry) {
         icons = new IIcon[4];
-        for (int i = 0; i < 4; i++) icons[i] = registry.registerIcon(Reference.ID + ":" + Names.CABLE_RF + "_" + i);
+        for (int i = 0; i < 4; i++) icons[i] = registry.registerIcon(StevesAddons.ID + ":" + Names.CABLE_RF + "_" + i);
     }
 
     @Override

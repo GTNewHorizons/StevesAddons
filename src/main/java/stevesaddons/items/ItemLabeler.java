@@ -24,7 +24,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import stevesaddons.StevesAddons;
 import stevesaddons.naming.NameRegistry;
 import stevesaddons.reference.Names;
-import stevesaddons.reference.Reference;
 import stevesaddons.registry.ItemRegistry;
 import vswe.stevesfactory.blocks.ModBlocks;
 import vswe.stevesfactory.blocks.TileEntityClusterElement;
@@ -34,7 +33,7 @@ public class ItemLabeler extends Item {
     public ItemLabeler() {
         this.setCreativeTab(ModBlocks.creativeTab);
         this.setUnlocalizedName(Names.LABELER);
-        this.setTextureName(Reference.ID.toLowerCase() + ":" + Names.LABELER);
+        this.setTextureName(StevesAddons.ID.toLowerCase() + ":" + Names.LABELER);
         this.setMaxStackSize(1);
     }
 

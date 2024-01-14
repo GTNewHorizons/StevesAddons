@@ -10,8 +10,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import stevesaddons.StevesAddons;
 import stevesaddons.reference.Names;
-import stevesaddons.reference.Reference;
 import vswe.stevesfactory.blocks.ModBlocks;
 import vswe.stevesfactory.blocks.TileEntityManager;
 
@@ -20,7 +20,7 @@ public class ItemSFMDrive extends Item {
     public ItemSFMDrive() {
         this.setCreativeTab(ModBlocks.creativeTab);
         this.setUnlocalizedName(Names.DRIVE);
-        this.setTextureName(Reference.ID.toLowerCase() + ":" + Names.DRIVE);
+        this.setTextureName(StevesAddons.ID.toLowerCase() + ":" + Names.DRIVE);
         this.setMaxStackSize(1);
     }
 

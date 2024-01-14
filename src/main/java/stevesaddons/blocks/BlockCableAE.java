@@ -6,8 +6,8 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import stevesaddons.StevesAddons;
 import stevesaddons.reference.Names;
-import stevesaddons.reference.Reference;
 import stevesaddons.tileentities.TileEntityAENode;
 import vswe.stevesfactory.blocks.ModBlocks;
 
@@ -28,6 +28,6 @@ public class BlockCableAE extends BlockContainer {
 
     @Override
     public void registerBlockIcons(IIconRegister ir) {
-        this.blockIcon = ir.registerIcon(Reference.ID + ":" + Names.CABLE_AE);
+        this.blockIcon = ir.registerIcon(StevesAddons.ID + ":" + Names.CABLE_AE);
     }
 }
