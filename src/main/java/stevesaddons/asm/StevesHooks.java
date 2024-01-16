@@ -1,4 +1,4 @@
-package stevesaddons.compat;
+package stevesaddons.asm;
 
 import java.util.ArrayList;
 import java.util.Collection;
