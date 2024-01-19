@@ -23,6 +23,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import stevesaddons.asm.StevesHooks;
 import stevesaddons.helpers.Config;
 import stevesaddons.helpers.StevesEnum;
 import stevesaddons.interfaces.GuiHandler;
@@ -37,6 +38,7 @@ import stevesaddons.registry.BlockRegistry;
 import stevesaddons.registry.CommandRegistry;
 import stevesaddons.registry.ItemRegistry;
 import vswe.stevesfactory.blocks.TileEntityManager;
+import vswe.stevesfactory.compat.Compat;
 
 @Mod(
         modid = StevesAddons.ID,
@@ -65,6 +67,8 @@ public class StevesAddons {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        Compat.ADDONS_HOOKS = new StevesHooks();
+
         metadata = Metadata.init(metadata);
         Config.init(event.getSuggestedConfigurationFile());
         ItemRegistry.registerItems();

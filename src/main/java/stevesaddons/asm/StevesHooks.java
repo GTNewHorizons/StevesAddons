@@ -3,6 +3,7 @@ package stevesaddons.asm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -29,28 +32,35 @@ import stevesaddons.api.IHiddenInventory;
 import stevesaddons.api.IHiddenTank;
 import stevesaddons.components.ComponentMenuTriggered;
 import stevesaddons.helpers.StevesEnum;
+import stevesaddons.interfaces.GuiRFManager;
 import stevesaddons.naming.BlockCoord;
 import stevesaddons.naming.NameRegistry;
 import stevesaddons.reference.Null;
 import stevesaddons.threading.SearchItems;
 import vswe.stevesfactory.Localization;
 import vswe.stevesfactory.blocks.ConnectionBlock;
+import vswe.stevesfactory.blocks.TileEntityCluster;
 import vswe.stevesfactory.blocks.TileEntityManager;
+import vswe.stevesfactory.blocks.TileEntityRFCluster;
+import vswe.stevesfactory.compat.Hooks;
+import vswe.stevesfactory.components.CommandExecutorRF;
 import vswe.stevesfactory.components.ComponentHelper;
 import vswe.stevesfactory.components.ComponentMenuItem;
 import vswe.stevesfactory.components.ComponentType;
 import vswe.stevesfactory.components.Connection;
+import vswe.stevesfactory.components.ConnectionOption;
+import vswe.stevesfactory.components.ConnectionSet;
 import vswe.stevesfactory.components.FlowComponent;
 import vswe.stevesfactory.components.ScrollController;
 import vswe.stevesfactory.network.DataReader;
 import vswe.stevesfactory.network.DataWriter;
 import vswe.stevesfactory.settings.Settings;
 
-public class StevesHooks {
+public class StevesHooks implements Hooks {
 
     public static final Multimap<TileEntityManager, FlowComponent> delayedRegistry = HashMultimap.create();
 
-    public static void addCopyButton(final TileEntityManager manager) {
+    public void addCopyButton(final TileEntityManager manager) {
         int index = getAfterDelete(manager.buttons);
         manager.buttons.add(index, manager.new Button(StevesEnum.COPY_COMMAND) {
 
@@ -159,18 +169,39 @@ public class StevesHooks {
         }
     }
 
-    public static ItemStack fixLoadingStack(ItemStack stack) {
+    public ItemStack fixLoadingStack(ItemStack stack) {
         if (stack != null && stack.getItem() == null) return null;
         return stack;
     }
 
-    public static String fixToolTip(String string, TileEntity tileEntity) {
+    @Override
+    public void executeTriggerCommand(TileEntityManager thiz, FlowComponent component,
+            EnumSet<ConnectionOption> validTriggerOutputs) {
+        new CommandExecutorRF(thiz).executeTriggerCommand(component, validTriggerOutputs);
+    }
+
+    @Override
+    public GuiScreen getGui(TileEntity te, InventoryPlayer inv) {
+        return new GuiRFManager((TileEntityManager) te, inv);
+    }
+
+    @Override
+    public boolean isNotDelayed(ConnectionSet s) {
+        return s != StevesEnum.DELAYED;
+    }
+
+    public String fixToolTip(String string, TileEntity tileEntity) {
         if (tileEntity != null && tileEntity.hasWorldObj()) {
             String label = getLabel(tileEntity);
             if (label != null) string = "§3" + label;
             string += getContentString(tileEntity);
         }
         return string;
+    }
+
+    @Override
+    public TileEntityCluster getTERFC() {
+        return new TileEntityRFCluster();
     }
 
     public static void removeFlowComponent(TileEntityManager manager, int idToRemove, List<FlowComponent> components) {
@@ -227,7 +258,7 @@ public class StevesHooks {
         ids.add(idToRemove);
     }
 
-    public static boolean instanceOf(Class clazz, TileEntity entity) {
+    public boolean instanceOf(Class clazz, TileEntity entity) {
         return clazz.isInstance(entity) || entity instanceof IHiddenTank && clazz == IFluidHandler.class
                 || entity instanceof IHiddenInventory && clazz == IInventory.class
                 || clazz == IEnergyConnection.class
@@ -265,14 +296,14 @@ public class StevesHooks {
         return NameRegistry.getSavedName(tileEntity.getWorldObj().provider.dimensionId, coord);
     }
 
-    public static List updateItemSearch(ComponentMenuItem menu, String search, boolean showAll) {
+    public List updateItemSearch(ComponentMenuItem menu, String search, boolean showAll) {
         ScrollController searchController = ComponentHelper.getController(menu);
         Thread thread = new Thread(new SearchItems(search, searchController, showAll));
         thread.start();
         return searchController.getResult();
     }
 
-    public static boolean containerAdvancedSearch(ConnectionBlock block, String search) {
+    public boolean containerAdvancedSearch(ConnectionBlock block, String search) {
         TileEntity tileEntity = block.getTileEntity();
         String toSearch = getLabel(tileEntity);
         Pattern pattern = Pattern.compile(Pattern.quote(search), Pattern.CASE_INSENSITIVE);
@@ -286,7 +317,7 @@ public class StevesHooks {
         }
     }
 
-    public static void tickTriggers(TileEntityManager manager) {
+    public void tickTriggers(TileEntityManager manager) {
         tick(delayedRegistry.get(manager));
     }
 
