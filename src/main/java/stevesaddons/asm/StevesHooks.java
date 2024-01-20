@@ -60,6 +60,7 @@ public class StevesHooks implements Hooks {
 
     public static final Multimap<TileEntityManager, FlowComponent> delayedRegistry = HashMultimap.create();
 
+    @Override
     public void addCopyButton(final TileEntityManager manager) {
         int index = getAfterDelete(manager.buttons);
         manager.buttons.add(index, manager.new Button(StevesEnum.COPY_COMMAND) {
@@ -169,6 +170,7 @@ public class StevesHooks implements Hooks {
         }
     }
 
+    @Override
     public ItemStack fixLoadingStack(ItemStack stack) {
         if (stack != null && stack.getItem() == null) return null;
         return stack;
@@ -258,6 +260,7 @@ public class StevesHooks implements Hooks {
         ids.add(idToRemove);
     }
 
+    @Override
     public boolean instanceOf(Class clazz, TileEntity entity) {
         return clazz.isInstance(entity) || entity instanceof IHiddenTank && clazz == IFluidHandler.class
                 || entity instanceof IHiddenInventory && clazz == IInventory.class
@@ -296,6 +299,7 @@ public class StevesHooks implements Hooks {
         return NameRegistry.getSavedName(tileEntity.getWorldObj().provider.dimensionId, coord);
     }
 
+    @Override
     public List updateItemSearch(ComponentMenuItem menu, String search, boolean showAll) {
         ScrollController searchController = ComponentHelper.getController(menu);
         Thread thread = new Thread(new SearchItems(search, searchController, showAll));
@@ -303,6 +307,7 @@ public class StevesHooks implements Hooks {
         return searchController.getResult();
     }
 
+    @Override
     public boolean containerAdvancedSearch(ConnectionBlock block, String search) {
         TileEntity tileEntity = block.getTileEntity();
         String toSearch = getLabel(tileEntity);
@@ -317,6 +322,7 @@ public class StevesHooks implements Hooks {
         }
     }
 
+    @Override
     public void tickTriggers(TileEntityManager manager) {
         tick(delayedRegistry.get(manager));
     }
