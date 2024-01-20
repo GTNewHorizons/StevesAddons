@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
@@ -183,6 +185,7 @@ public class StevesHooks implements Hooks {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public GuiScreen getGui(TileEntity te, InventoryPlayer inv) {
         return new GuiRFManager((TileEntityManager) te, inv);
     }
