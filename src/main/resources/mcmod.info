@@ -11,9 +11,6 @@
 		"authors": ["hilburn"],
 		"credits": "Authored by hilburn, as an addon to VSWE's SFM",
 		"logoFile": "",
-		"screenshots": [],
-		"requiredMods": ["StevesFactoryManager", "CoFHCore"],
-		"dependencies": ["StevesFactoryManager", "CoFHCore"],
-		"useDependencyInformation": true
+		"screenshots": []
 	}]
 }
