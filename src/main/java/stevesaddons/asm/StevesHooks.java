@@ -133,6 +133,7 @@ public class StevesHooks implements Hooks {
     private static void copyConnectionsWithChildren(Map<FlowComponent, FlowComponent> added,
             List<FlowComponent> existing, FlowComponent toCopy, FlowComponent newParent, boolean reset) {
         FlowComponent newComponent = toCopy.copy();
+        newComponent.setId(existing.size() + added.size());
         newComponent.clearConnections();
         newComponent.setParent(newParent);
         if (reset) {
@@ -140,7 +141,6 @@ public class StevesHooks implements Hooks {
             newComponent.setX(50);
             newComponent.setY(50);
         }
-        newComponent.setId(existing.size() + added.size());
         added.put(toCopy, newComponent);
         for (FlowComponent component : existing) {
             if (component.getParent() == toCopy) {
