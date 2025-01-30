@@ -332,16 +332,20 @@ public class StevesHooks implements Hooks {
     }
 
     private static void tick(Collection<FlowComponent> triggers) {
-        if (triggers != null) {
-            for (Iterator<FlowComponent> itr = triggers.iterator(); itr.hasNext();) {
-                ComponentMenuTriggered toTrigger = (ComponentMenuTriggered) itr.next().getMenus().get(6);
-                if (toTrigger.isVisible()) {
-                    toTrigger.tick();
-                    if (toTrigger.remove()) itr.remove();
-                } else {
-                    itr.remove();
-                }
+        if (triggers == null) return;
+        List<FlowComponent> toRemove = new ArrayList<>(triggers.size());
+        for (FlowComponent component : triggers) {
+            ComponentMenuTriggered toTrigger = (ComponentMenuTriggered) component.getMenus().get(6);
+            if (toTrigger.isVisible()) {
+                toTrigger.tick();
+                if (toTrigger.remove()) toRemove.add(component);
+            } else {
+                toRemove.add(component);
             }
+        }
+
+        if (!toRemove.isEmpty()) {
+            triggers.removeAll(toRemove);
         }
     }
 
