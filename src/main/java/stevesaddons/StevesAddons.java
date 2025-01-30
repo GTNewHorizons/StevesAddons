@@ -64,6 +64,7 @@ public class StevesAddons {
 
     public static GuiHandler guiHandler = new GuiHandler();
     public static Logger log = LogManager.getLogger(ID);
+    public static boolean isMFRLoaded;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -75,6 +76,7 @@ public class StevesAddons {
         BlockRegistry.registerBlocks();
         MessageHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(StevesAddons.INSTANCE, guiHandler);
+        isMFRLoaded = Loader.isModLoaded("MineFactoryReloaded");
     }
 
     @Mod.EventHandler

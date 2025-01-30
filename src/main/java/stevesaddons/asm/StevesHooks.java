@@ -30,6 +30,7 @@ import cofh.api.energy.IEnergyReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import powercrystals.minefactoryreloaded.api.IDeepStorageUnit;
+import stevesaddons.StevesAddons;
 import stevesaddons.api.IHiddenInventory;
 import stevesaddons.api.IHiddenTank;
 import stevesaddons.components.ComponentMenuTriggered;
@@ -273,7 +274,7 @@ public class StevesHooks implements Hooks {
 
     public static String getContentString(TileEntity tileEntity) {
         String result = "";
-        if (tileEntity instanceof IDeepStorageUnit) {
+        if (StevesAddons.isMFRLoaded && tileEntity instanceof IDeepStorageUnit) {
             ItemStack stack = ((IDeepStorageUnit) tileEntity).getStoredItemType();
             String contains = "\n";
             if (stack == null || stack.isItemEqual(Null.NULL_STACK))
