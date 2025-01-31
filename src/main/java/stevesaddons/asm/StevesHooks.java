@@ -30,6 +30,7 @@ import cofh.api.energy.IEnergyReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import powercrystals.minefactoryreloaded.api.IDeepStorageUnit;
+import stevesaddons.StevesAddons;
 import stevesaddons.api.IHiddenInventory;
 import stevesaddons.api.IHiddenTank;
 import stevesaddons.components.ComponentMenuTriggered;
@@ -273,7 +274,7 @@ public class StevesHooks implements Hooks {
 
     public static String getContentString(TileEntity tileEntity) {
         String result = "";
-        if (tileEntity instanceof IDeepStorageUnit) {
+        if (StevesAddons.isMFRLoaded && tileEntity instanceof IDeepStorageUnit) {
             ItemStack stack = ((IDeepStorageUnit) tileEntity).getStoredItemType();
             String contains = "\n";
             if (stack == null || stack.isItemEqual(Null.NULL_STACK))
@@ -331,16 +332,20 @@ public class StevesHooks implements Hooks {
     }
 
     private static void tick(Collection<FlowComponent> triggers) {
-        if (triggers != null) {
-            for (Iterator<FlowComponent> itr = triggers.iterator(); itr.hasNext();) {
-                ComponentMenuTriggered toTrigger = (ComponentMenuTriggered) itr.next().getMenus().get(6);
-                if (toTrigger.isVisible()) {
-                    toTrigger.tick();
-                    if (toTrigger.remove()) itr.remove();
-                } else {
-                    itr.remove();
-                }
+        if (triggers == null) return;
+        List<FlowComponent> toRemove = new ArrayList<>(triggers.size());
+        for (FlowComponent component : triggers) {
+            ComponentMenuTriggered toTrigger = (ComponentMenuTriggered) component.getMenus().get(6);
+            if (toTrigger.isVisible()) {
+                toTrigger.tick();
+                if (toTrigger.remove()) toRemove.add(component);
+            } else {
+                toRemove.add(component);
             }
+        }
+
+        if (!toRemove.isEmpty()) {
+            triggers.removeAll(toRemove);
         }
     }
 
