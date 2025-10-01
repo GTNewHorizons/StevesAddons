@@ -33,7 +33,10 @@ public class EventHandler {
 
     @SubscribeEvent
     public void blockBreak(BlockEvent.BreakEvent event) {
-        NameRegistry.removeName(event.world, event.x, event.y, event.z);
+        // Check config - if persistent_labels is false (default), auto-remove labels
+        if (!stevesaddons.helpers.Config.persistentLabels) {
+            NameRegistry.removeName(event.world, event.x, event.y, event.z);
+        }
     }
 
     @SubscribeEvent

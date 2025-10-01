@@ -14,6 +14,7 @@ public class Config {
     public static boolean wailaIntegration = true;
     public static boolean aeIntegration = Loader.isModLoaded("appliedenergistics2");
     public static boolean buildIndexEagerly;
+    public static boolean persistentLabels = false;
 
     public static void init(File file) {
         Configuration config = new Configuration(file);
@@ -37,6 +38,10 @@ public class Config {
             ae.comment = "Enable Energistics Connector";
             aeIntegration = ae.getBoolean();
         }
+
+        Property persistent = config.get("General", "persistent_labels", persistentLabels);
+        persistent.comment = "Whether labels persist at coordinates when blocks are broken (true) or get cleared automatically (false, default)";
+        persistentLabels = persistent.getBoolean();
 
         config.save();
     }

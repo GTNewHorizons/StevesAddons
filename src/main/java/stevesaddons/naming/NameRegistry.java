@@ -37,6 +37,7 @@ public class NameRegistry {
             if (!instance.nameMapping.containsKey(world.provider.dimensionId))
                 instance.nameMapping.put(world.provider.dimensionId, new NameData());
             NameData data = instance.nameMapping.get(world.provider.dimensionId);
+            data.put(coord);
             data.markDirty();
             MessageHandler.INSTANCE.sendToAll(new NameDataUpdateMessage(world.provider.dimensionId, coord));
         }
@@ -46,6 +47,7 @@ public class NameRegistry {
         if (!instance.nameMapping.containsKey(message.dimId)) instance.nameMapping.put(message.dimId, new NameData());
         NameData data = instance.nameMapping.get(message.dimId);
         data.put(message.blockCoord);
+        data.markDirty();
     }
 
     public static boolean removeName(World world, int x, int y, int z) {
