@@ -4,11 +4,9 @@ import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import stevesaddons.naming.BlockCoord;
 import stevesaddons.naming.NameRegistry;
-import stevesaddons.network.MessageHandler;
 
 public class NameDataUpdateMessage implements IMessage, IMessageHandler<NameDataUpdateMessage, IMessage> {
 
@@ -49,9 +47,7 @@ public class NameDataUpdateMessage implements IMessage, IMessageHandler<NameData
     public IMessage onMessage(NameDataUpdateMessage message, MessageContext ctx) {
         if (message.remove) NameRegistry.removeName(message);
         else NameRegistry.saveName(message);
-        if (ctx.side == Side.SERVER) {
-            MessageHandler.INSTANCE.sendToAll(message);
-        }
+        // Don't re-broadcast here - the direct server method already handles broadcasting
         return null;
     }
 }
