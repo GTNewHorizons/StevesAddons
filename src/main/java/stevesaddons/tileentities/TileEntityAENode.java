@@ -191,7 +191,7 @@ public class TileEntityAENode extends TileEntityClusterElement
 
     @Override
     protected EnumSet<ClusterMethodRegistration> getRegistrations() {
-        return null;
+        return EnumSet.noneOf(ClusterMethodRegistration.class);
     }
 
     @Override
