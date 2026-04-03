@@ -18,9 +18,13 @@ lib/1.6.4/
 *.json
 
 ## gradle
-/.gradle
+/.gradle/
 /build
 /eclipse
+/gradle/**
+!/gradle/
+!/gradle/gradle-daemon-jvm.properties
+
 ## ForgeGradle
 /run
 /out
@@ -45,7 +49,6 @@ lib/1.6.4/
 output/
 gradlew
 gradlew.bat
-gradle/
 install.bat
 .cache
 build.xml
