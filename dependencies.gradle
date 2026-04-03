@@ -11,7 +11,6 @@ dependencies {
     compileOnly('com.github.GTNewHorizons:NotEnoughItems:2.8.84-GTNH:dev')
     compileOnly('com.github.GTNewHorizons:waila:1.19.22:dev')
     compileOnly('com.github.GTNewHorizons:Applied-Energistics-2-Unofficial:rv3-beta-881-GTNH:dev') {transitive = false}
-    compileOnly('com.github.GTNewHorizons:ExtraCells2:2.5.35:dev') {transitive = false}
 
     compileOnly('curse.maven:minefactory-reloaded-66672:2366150')
 }
