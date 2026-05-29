@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -51,12 +50,11 @@ public class GuiLabeler extends GuiScreen implements IVerticalScrollContainer, I
     private ItemStack stack;
     private GuiTextField searchBar;
     private GuiVerticalScrollBar scrollBar;
-    private EntityPlayer player;
     public int mouseX = 0;
     public int mouseY = 0;
     private int xSize, ySize, guiLeft, guiTop;
 
-    public GuiLabeler(ItemStack stack, EntityPlayer player) {
+    public GuiLabeler(ItemStack stack) {
         this.stack = stack;
         for (String string : ItemLabeler.getSavedStrings(stack)) {
             strings.add(getGuiTextEntry(string));
@@ -68,7 +66,6 @@ public class GuiLabeler extends GuiScreen implements IVerticalScrollContainer, I
         searchBar.setText(ItemLabeler.getLabel(stack));
         searchBar.fixCursorPos();
         displayStrings = getSearchedStrings();
-        this.player = player;
     }
 
     public static GuiTextEntry getGuiTextEntry(String string) {
@@ -185,8 +182,9 @@ public class GuiLabeler extends GuiScreen implements IVerticalScrollContainer, I
         for (GuiTextEntry entry : strings) if (!save.contains(entry.getText())) save.add(entry.getText());
         searchBar.close();
         ItemLabeler.saveStrings(stack, save);
-        ItemLabeler.setLabel(stack, searchBar.getText());
-        MessageHandler.INSTANCE.sendToServer(new LabelSyncMessage(stack, player));
+        String searchText = searchBar.getText();
+        ItemLabeler.setLabel(stack, searchText);
+        MessageHandler.INSTANCE.sendToServer(new LabelSyncMessage(save, searchText));
     }
 
     @Override

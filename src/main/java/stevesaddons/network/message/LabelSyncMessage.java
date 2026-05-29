@@ -1,53 +1,60 @@
 package stevesaddons.network.message;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.WorldServer;
+import java.util.ArrayList;
+import java.util.List;
 
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import stevesaddons.items.ItemLabeler;
+import stevesaddons.registry.ItemRegistry;
 
 public class LabelSyncMessage implements IMessage, IMessageHandler<LabelSyncMessage, IMessage> {
 
-    ItemStack stack;
-    int id;
+    List<String> save;
+    String text;
 
     public LabelSyncMessage() {}
 
-    public LabelSyncMessage(ItemStack stack, EntityPlayer player) {
-        this.stack = stack;
-        this.id = player.getEntityId();
+    public LabelSyncMessage(List<String> save, String text) {
+        this.save = save;
+        this.text = text;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.stack = ByteBufUtils.readItemStack(buf);
-        id = buf.readInt();
+        int size = buf.readShort();
+        save = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            save.add(ByteBufUtils.readUTF8String(buf));
+        }
+        text = ByteBufUtils.readUTF8String(buf);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        ByteBufUtils.writeItemStack(buf, stack);
-        buf.writeInt(id);
+        buf.writeShort(save.size());
+        for (String s : save) {
+            ByteBufUtils.writeUTF8String(buf, s);
+        }
+        ByteBufUtils.writeUTF8String(buf, text);
     }
 
     @Override
     public IMessage onMessage(LabelSyncMessage message, MessageContext ctx) {
-        EntityPlayer player = null;
-        for (WorldServer world : FMLCommonHandler.instance().getMinecraftServerInstance().worldServers) {
-            Entity entity = world.getEntityByID(message.id);
-            if (entity instanceof EntityPlayer) {
-                player = (EntityPlayer) entity;
-                break;
-            }
-        }
+        EntityPlayerMP player = ctx.getServerHandler().playerEntity;
         if (player != null) {
-            player.inventory.setInventorySlotContents(player.inventory.currentItem, message.stack);
+            ItemStack current = player.inventory.getCurrentItem();
+            if (current != null && current.getItem() == ItemRegistry.labeler) {
+                ItemLabeler.saveStrings(current, message.save);
+                ItemLabeler.setLabel(current, message.text);
+                player.inventory.setInventorySlotContents(player.inventory.currentItem, current);
+            }
         }
         return null;
     }
